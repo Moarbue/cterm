@@ -16,7 +16,7 @@ shader_dir := "shaders"
 
 
 # source files
-src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "lineal.c " + src_dir / "gl.c"
+src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "shader.c " + src_dir / "renderer.c " + src_dir / "lineal.c " + src_dir / "glad.c"
 # executable path
 bin := bin_dir / "cterm"
 # libraries
