@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#define BEZIER_ITERATIONS 1024
+
 struct Uniform_Definition {
     enum Uniform uniform;
     const char *name;
@@ -92,7 +94,7 @@ void renderer_line(Renderer *r, Vec2f pos0, Vec2f pos1, Vec4f col, float stroke_
     float a0, b0, c0, b1, c1, phi;
     c0 = stroke_width / 2.f;
     b1 = pos0.y - pos1.y;
-    c1 = vec2f_len(pos0, pos1);
+    c1 = vec2f_dst(pos0, pos1);
     phi = asinf(b1 / c1);
     a0 = cosf(phi) * c0;
     b0 = sinf(phi) * c0;
