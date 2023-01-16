@@ -46,6 +46,7 @@ void renderer_vertex(Renderer *r, Vec2f pos, Vec4f col, Vec2f uv);
 void renderer_triangle(Renderer *r, Vec2f pos0, Vec2f pos1, Vec2f pos2, Vec4f col0, Vec4f col1, Vec4f col2, Vec2f uv0, Vec2f uv1, Vec2f uv2);
 void renderer_solid_rect(Renderer *r, float x, float y, float w, float h, Vec4f col);
 void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, float uv_x, float uv_y, float uv_w, float uv_h);
+void renderer_line(Renderer *r, Vec2f pos0, Vec2f pos1, Vec4f col, float stroke_width);
 void renderer_set_shader(Renderer *r, enum Shader shader);
 
 void texture_new(const char *texture_image_path);

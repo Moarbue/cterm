@@ -87,6 +87,26 @@ void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, floa
                          vec2f(uv_x, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y));
 }
 
+void renderer_line(Renderer *r, Vec2f pos0, Vec2f pos1, Vec4f col, float stroke_width)
+{
+    float a0, b0, c0, b1, c1, phi;
+    c0 = stroke_width / 2.f;
+    b1 = pos0.y - pos1.y;
+    c1 = vec2f_len(pos0, pos1);
+    phi = asinf(b1 / c1);
+    a0 = cosf(phi) * c0;
+    b0 = sinf(phi) * c0;
+
+    Vec2f p0, p1, p2, p3;
+    p0 = vec2f(pos0.x - b0, pos0.y - a0);
+    p1 = vec2f(pos1.x - b0, pos1.y - a0);
+    p2 = vec2f(pos0.x + b0, pos0.y + a0);
+    p3 = vec2f(pos1.x + b0, pos1.y + a0);
+
+    renderer_triangle(r, p0, p1, p2, col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
+    renderer_triangle(r, p3, p2, p1, col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
+}
+
 void renderer_set_shader(Renderer *r, enum Shader shader)
 {
     renderer_flush(r);
