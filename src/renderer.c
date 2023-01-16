@@ -20,6 +20,7 @@ static const struct Uniform_Definition uniform_definitions[UNIFORM_COUNT] = {
 };
 
 void shader_new(unsigned int *shader, const char *vertex_path, const char *fragment_path, const char *geometry_path);
+void renderer_flush(Renderer *r);
 static void get_uniform_location(GLuint program, GLint locations[UNIFORM_COUNT]);
 
 void renderer_init(Renderer *r, const char *vertex_path, const char *color_path, const char *texture_path)
@@ -88,6 +89,7 @@ void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, floa
 
 void renderer_set_shader(Renderer *r, enum Shader shader)
 {
+    renderer_flush(r);
     glUseProgram(r->program[shader]);
     get_uniform_location(r->program[shader], r->uniforms);
     glUniform1f(r->uniforms[UNIFORM_TIME], r->time);
