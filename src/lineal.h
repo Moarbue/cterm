@@ -17,6 +17,7 @@ float vec2f_dst(Vec2f a, Vec2f b);
 float vec2f_phi(Vec2f a);
 Vec2f vec2f_coord(float mag, float phi);
 float vec2f_dot(Vec2f a, Vec2f b);
+Vec2f vec2f_lerp(Vec2f a, Vec2f b, float t);
 
 typedef struct {
     int x;

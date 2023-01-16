@@ -131,6 +131,12 @@ float vec4f_dot(Vec4f a, Vec4f b)
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
+Vec2f vec2f_lerp(Vec2f a, Vec2f b, float t)
+{
+    return vec2f(lerp(a.x, b.x, t),
+                 lerp(a.y, b.y, t));
+}
+
 //////////////////////////
 
 Vec4i vec4i(int x, int y, int z, int w)
