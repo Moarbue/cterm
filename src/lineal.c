@@ -46,6 +46,12 @@ float vec2f_dst(Vec2f a, Vec2f b)
     return vec2f_mag(v0);
 }
 
+float vec2f_phi(Vec2f a)
+{
+    if (a.x == 0) return M_PI_2 * (a.y < 0 ? -1 : 1);
+    return atan2f(a.y, a.x);
+}
+
 //////////////////////////
 
 Vec2i vec2i(int x, int y)
