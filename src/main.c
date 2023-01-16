@@ -40,11 +40,9 @@ int main()
         
         renderer_set_shader(&r, SHADER_TEXTURE);
         renderer_texture_rect(&r, -.5f, -.5f, 1.f, 1.f, 0.f, 0.f, 1.f, 1.f);
-        renderer_flush(&r);
 
         renderer_set_shader(&r, SHADER_COLOR);
         renderer_solid_rect(&r, 0.3f, 0.35f, 0.21f, 0.3f, vec4fs(1.f));
-        renderer_flush(&r);
 
         r.time = glfwGetTime();
         glfwSwapBuffers(window);
