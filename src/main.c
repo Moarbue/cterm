@@ -18,6 +18,7 @@ Button btn;
 
 void cleanup(void);
 void glfw_process_keyboard_input(GLFWwindow *window);
+void glfw_framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void btn0_on_click(int btn);
 
@@ -27,8 +28,7 @@ int main()
     // Initialize and configure GLFW
     set_up_glfw();
     // Create and configure window
-    window = create_window();
-    glfwSetMouseButtonCallback(window,glfw_mouse_button_callback);
+    window = create_window(glfw_framebuffer_size_callback, glfw_mouse_button_callback);
     // Load OpenGL functions
     load_opengl_functions();
 
@@ -66,6 +66,14 @@ void glfw_process_keyboard_input(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void glfw_framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
+    (void)window;
+    ww = width;
+    wh = height;
+    glViewport(0, 0, ww, wh);
 }
 
 void glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)

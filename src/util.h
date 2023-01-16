@@ -10,7 +10,7 @@
 #define DEFAULT_WINDOW_HEIGHT 600
 
 void set_up_glfw(void);
-GLFWwindow * create_window();
+GLFWwindow * create_window(GLFWframebuffersizefun framebuffer_size_callback, GLFWmousebuttonfun mouse_button_callback);
 void load_opengl_functions(void);
 
 #endif // _CTERM_UTIL_H_

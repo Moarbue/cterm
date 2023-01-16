@@ -13,14 +13,6 @@ void glfw_error_callback(int error, char *description)
     fprintf(stderr, "ERROR: %s\n", description);
 }
 
-void glfw_framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
-    (void)window;
-    ww = width;
-    wh = height;
-    glViewport(0, 0, ww, wh);
-}
-
 void gl_message_callback(GLenum source,
                      GLenum type,
                      GLuint id,
@@ -52,13 +44,14 @@ void set_up_glfw(void)
     glfwSetErrorCallback((GLFWerrorfun)glfw_error_callback);
 }
 
-GLFWwindow * create_window()
+GLFWwindow * create_window(GLFWframebuffersizefun framebuffer_size_callback, GLFWmousebuttonfun mouse_button_callback)
 {
     GLFWwindow *window = glfwCreateWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "cterm", NULL, NULL);
     if (window == NULL)
         PANIC("ERROR: Failed to create window!\n");
 
-    glfwSetFramebufferSizeCallback(window, (GLFWframebuffersizefun)glfw_framebuffer_size_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwMakeContextCurrent(window);
 
     return window;
