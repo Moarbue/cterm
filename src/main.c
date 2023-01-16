@@ -53,6 +53,11 @@ int main()
         renderer_line(&r, vec2f(0.f, .9f),   vec2f(0.f, -.9f), red,   0.006);
         renderer_line(&r, vec2f(-1.f, 0.f),  vec2f(1.f, 0.f),  red,   0.006);
 
+        renderer_set_shader(&r, SHADER_COLOR);
+        renderer_cubic_bezier(&r, vec2f(-.5f, -.5f), vec2f(-.45, .5f), vec2f(.45f, .5f), vec2f(.5f, -.5f), black, 0.01);
+        renderer_cubic_bezier(&r, vec2f(-.6f, -.14f), vec2f(-.45, .5f), vec2f(.45f, .5f), vec2f(.9f, -.46f), black, 0.01);
+        renderer_cubic_bezier(&r, vec2f(-.6f, .14f), vec2f(-.45, -.5f), vec2f(.45f, -.5f), vec2f(.9f, .46f), black, 0.01);
+
         r.time = glfwGetTime();
         glfwSwapBuffers(window);
     }
