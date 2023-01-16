@@ -18,7 +18,7 @@ resources_dir := "resources"
 
 
 # source files
-src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "shader.c " + src_dir / "renderer.c " + src_dir / "lineal.c " + src_dir / "glad.c"
+src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "shader.c " + src_dir / "renderer.c " + src_dir / "lineal.c " + src_dir / "button.c " + src_dir / "glad.c"
 # executable path
 bin := bin_dir / "cterm"
 # libraries
