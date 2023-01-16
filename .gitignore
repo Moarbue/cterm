@@ -1,3 +1,4 @@
 bin/shaders/
 bin/resources/
 bin/cterm.exe
+.vscode/
