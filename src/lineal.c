@@ -52,6 +52,11 @@ float vec2f_phi(Vec2f a)
     return atan2f(a.y, a.x);
 }
 
+Vec2f vec2f_coord(float mag, float phi)
+{
+    return vec2f(mag * cosf(phi), mag * sinf(phi));
+}
+
 //////////////////////////
 
 Vec2i vec2i(int x, int y)
