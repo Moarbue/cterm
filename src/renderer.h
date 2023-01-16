@@ -28,7 +28,7 @@ struct Vertex {
     Vec2f uv;   
 };
 
-#define VERTICES_CAPACITY (64 * 1024)
+#define VERTICES_CAPACITY (512 * 1024)
 
 typedef struct {
     GLuint vao;
@@ -47,6 +47,7 @@ void renderer_triangle(Renderer *r, Vec2f pos0, Vec2f pos1, Vec2f pos2, Vec4f co
 void renderer_solid_rect(Renderer *r, float x, float y, float w, float h, Vec4f col);
 void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, float uv_x, float uv_y, float uv_w, float uv_h);
 void renderer_line(Renderer *r, Vec2f pos0, Vec2f pos1, Vec4f col, float stroke_width);
+void renderer_cubic_bezier(Renderer *r, Vec2f pos0, Vec2f pos1, Vec2f pos2, Vec2f pos3, Vec4f col, float stroke_width);
 void renderer_set_shader(Renderer *r, enum Shader shader);
 
 void texture_new(const char *texture_image_path);

@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#define BEZIER_ITERATIONS 1024
+#define BEZIER_ITERATIONS 256
 
 struct Uniform_Definition {
     enum Uniform uniform;
@@ -107,6 +107,28 @@ void renderer_line(Renderer *r, Vec2f pos0, Vec2f pos1, Vec4f col, float stroke_
 
     renderer_triangle(r, p0, p1, p2, col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
     renderer_triangle(r, p3, p2, p1, col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
+}
+
+void renderer_cubic_bezier(Renderer *r, Vec2f pos0, Vec2f pos1, Vec2f pos2, Vec2f pos3, Vec4f col, float stroke_width)
+{
+    float step, t;
+    Vec2f a, b, c, d, e, p0, p1;
+
+    p1   = pos0;
+    step = 1.f / BEZIER_ITERATIONS;
+    t    = 0.f;
+    for (size_t i = 0; i <= BEZIER_ITERATIONS && t <= 1.f; ++i, t += step) {
+        p0 = p1;
+
+        a  = vec2f_lerp(pos0, pos1, t);
+        b  = vec2f_lerp(pos1, pos2, t);
+        c  = vec2f_lerp(pos2, pos3, t);
+        d  = vec2f_lerp(a , b , t);
+        e  = vec2f_lerp(b , c , t);
+        p1 = vec2f_lerp(d , e , t);
+
+        renderer_line(r, p0, p1, col, stroke_width);
+    }
 }
 
 void renderer_set_shader(Renderer *r, enum Shader shader)
