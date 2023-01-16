@@ -43,6 +43,15 @@ int main()
 
         renderer_set_shader(&r, SHADER_COLOR);
         renderer_solid_rect(&r, 0.3f, 0.35f, 0.21f, 0.3f, vec4fs(1.f));
+        Vec4f red   = vec4f(1.f, 0.f, 0.f, 1.f);
+        Vec4f black = vec4f(0.f, 0.f, 0.f, 1.f);
+        renderer_set_shader(&r, SHADER_COLOR);
+        renderer_line(&r, vec2f(-1.f, 1.f),  vec2f(1.f, -1.f), black, 0.05);
+        renderer_line(&r, vec2f(-1.f, -1.f), vec2f(1.f, 1.f),  black, 0.05);
+        renderer_line(&r, vec2f(0.f, .9f),   vec2f(0.f, -.9f), black, 0.05);
+        renderer_line(&r, vec2f(-1.f, 0.f),  vec2f(1.f, 0.f),  black, 0.05);
+        renderer_line(&r, vec2f(0.f, .9f),   vec2f(0.f, -.9f), red,   0.006);
+        renderer_line(&r, vec2f(-1.f, 0.f),  vec2f(1.f, 0.f),  red,   0.006);
 
         r.time = glfwGetTime();
         glfwSwapBuffers(window);
