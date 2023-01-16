@@ -1,4 +1,5 @@
 #include "lineal.h"
+#include <math.h>
 
 Vec2f vec2f(float x, float y)
 {
@@ -33,6 +34,13 @@ Vec2f vec2f_div(Vec2f a, Vec2f b)
 float vec2f_dot(Vec2f a, Vec2f b)
 {
     return a.x * b.x + a.y * b.y;
+}
+
+float vec2f_len(Vec2f a, Vec2f b)
+{
+    Vec2f v0 = vec2f_sub(a, b);
+    Vec2f v1 = vec2f_mul(v0, v0);
+    return sqrtf(v1.x + v1.y);
 }
 
 //////////////////////////
