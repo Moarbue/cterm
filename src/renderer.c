@@ -1,4 +1,8 @@
 #include "renderer.h"
+#include "util.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -18,7 +22,7 @@ static const struct Uniform_Definition uniform_definitions[UNIFORM_COUNT] = {
 void shader_new(unsigned int *shader, const char *vertex_path, const char *fragment_path, const char *geometry_path);
 static void get_uniform_location(GLuint program, GLint locations[UNIFORM_COUNT]);
 
-void renderer_init(Renderer *r, const char *vertex_path, const char *fragment_path)
+void renderer_init(Renderer *r, const char *vertex_path, const char *color_path, const char *texture_path)
 {
     // vertex attribute object
     glGenVertexArrays(1, &r->vao);
@@ -41,8 +45,11 @@ void renderer_init(Renderer *r, const char *vertex_path, const char *fragment_pa
     glVertexAttribPointer(VERTEX_ATTR_UV, 2, GL_FLOAT, GL_FALSE, sizeof (struct Vertex), (void *) offsetof (struct Vertex, uv));
     glEnableVertexAttribArray(VERTEX_ATTR_UV);
 
-    // shader compilation
-    shader_new(&r->program, vertex_path, fragment_path, NULL);
+    // color shader compilation
+    shader_new(&r->program[SHADER_COLOR], vertex_path, color_path, NULL);
+
+    // texture shader compilation
+    shader_new(&r->program[SHADER_TEXTURE], vertex_path, texture_path, NULL);
 }
 
 void renderer_vertex(Renderer *r, Vec2f pos, Vec4f col, Vec2f uv)
@@ -62,10 +69,10 @@ void renderer_triangle(Renderer *r, Vec2f pos0, Vec2f pos1, Vec2f pos2, Vec4f co
     renderer_vertex(r, pos2, col2, uv2);
 }
 
-void renderer_set_shader(Renderer *r, enum Shader)
+void renderer_set_shader(Renderer *r, enum Shader shader)
 {
-    glUseProgram(r->program);
-    get_uniform_location(r->program, r->uniforms);
+    glUseProgram(r->program[shader]);
+    get_uniform_location(r->program[shader], r->uniforms);
     glUniform1f(r->uniforms[UNIFORM_TIME], r->time);
 }
 
@@ -77,6 +84,36 @@ void renderer_flush(Renderer *r)
     glDrawArrays(GL_TRIANGLES, 0, r->vertices_count);
     // reset the vertices count
     r->vertices_count = 0;
+}
+
+void texture_new(const char *texture_image_path)
+{
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+    int w, h, ch;
+    unsigned char *data;
+
+    stbi_set_flip_vertically_on_load(1);
+    data = stbi_load(texture_image_path, &w, &h, &ch, 0);
+    if (data == NULL)
+        PANIC("ERROR: Failed to load texture \'%s\'\n", texture_image_path);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free((void *) data);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
 }
 
 static void get_uniform_location(GLuint program, GLint locations[UNIFORM_COUNT])
