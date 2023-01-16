@@ -69,6 +69,23 @@ void renderer_triangle(Renderer *r, Vec2f pos0, Vec2f pos1, Vec2f pos2, Vec4f co
     renderer_vertex(r, pos2, col2, uv2);
 }
 
+void renderer_solid_rect(Renderer *r, float x, float y, float w, float h, Vec4f col)
+{
+    renderer_triangle(r, vec2f(x, y),     vec2f(x, y + h),     vec2f(x + w, y), col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
+    renderer_triangle(r, vec2f(x, y + h), vec2f(x + w, y + h), vec2f(x + w, y), col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
+}
+
+void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, float uv_x, float uv_y, float uv_w, float uv_h)
+{
+    renderer_triangle(r, vec2f(x, y),       vec2f(x, y + h),          vec2f(x + w, y), 
+                         vec4fs(0),         vec4fs(0),                vec4fs(0), 
+                         vec2f(uv_x, uv_y), vec2f(uv_x, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y));
+
+    renderer_triangle(r, vec2f(x, y + h),          vec2f(x + w, y + h),             vec2f(x + w, y),
+                         vec4fs(0),                vec4fs(0),                       vec4fs(0),
+                         vec2f(uv_x, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y));
+}
+
 void renderer_set_shader(Renderer *r, enum Shader shader)
 {
     glUseProgram(r->program[shader]);
