@@ -1,6 +1,7 @@
 #ifndef _CTERM_RENDERER_H_
 #define _CTERM_RENDERER_H_
 
+#include <stddef.h>
 #include "glad/glad.h"
 #include "lineal.h"
 

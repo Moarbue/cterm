@@ -22,7 +22,7 @@ src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "shader.c " + src_d
 # executable path
 bin := bin_dir / "cterm"
 # libraries
-libs := "-lopengl32 -lglfw3"
+libs := if os_family() == "windows" { "-lopengl32 -lglfw3" } else { "-lGL -lglfw -lm" }
 
 
 build:
