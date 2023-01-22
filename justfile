@@ -8,7 +8,7 @@ bin_dir := "bin"
 # library directory
 lib_dir := bin_dir
 # include directory
-inc_dir := "include"
+inc_dir := "include -I include/freetype2"
 # source directory
 src_dir := "src"
 # shader directory
@@ -18,11 +18,11 @@ resources_dir := "resources"
 
 
 # source files
-src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "shader.c " + src_dir / "renderer.c " + src_dir / "lineal.c " + src_dir / "button.c " + src_dir / "glad.c"
+src := src_dir / "main.c " + src_dir / "util.c " + src_dir / "shader.c " + src_dir / "renderer.c " + src_dir / "lineal.c " + src_dir / "glyphs.c " + src_dir / "button.c " + src_dir / "glad.c"
 # executable path
 bin := bin_dir / "cterm"
 # libraries
-libs := if os_family() == "windows" { "-lopengl32 -lglfw3" } else { "-lGL -lglfw -lm" }
+libs := if os_family() == "windows" { "-lopengl32 -lglfw3 -lfreetype" } else { "-lGL -lglfw -lm -lfreetype" }
 
 
 build:
