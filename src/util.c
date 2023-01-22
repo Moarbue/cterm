@@ -53,6 +53,7 @@ GLFWwindow * create_window(GLFWframebuffersizefun framebuffer_size_callback, GLF
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwMakeContextCurrent(window);
+    glfwGetWindowSize(window, &ww, &wh);
 
     return window;
 }
@@ -74,4 +75,14 @@ void load_opengl_functions(void)
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(gl_message_callback, 0); 
     }   
+}
+
+void freetype_init(FT_Library *ftl)
+{
+    if (ftl == NULL)
+        PANIC("ERROR: Argument of freetype_init() FT_Library cannot be NULL!\n");
+
+    FT_Error error = FT_Init_FreeType(ftl);
+    if (error)
+        PANIC("ERROR: Failed to initialize FreeType library!\n");
 }

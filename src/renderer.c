@@ -19,13 +19,17 @@ static const struct Uniform_Definition uniform_definitions[UNIFORM_COUNT] = {
         .uniform = UNIFORM_TIME,
         .name    = "time",
     },
+    [UNIFORM_RESOLUTION] = {
+        .uniform = UNIFORM_RESOLUTION,
+        .name    = "resolution",
+    },
 };
 
 void shader_new(unsigned int *shader, const char *vertex_path, const char *fragment_path, const char *geometry_path);
 void renderer_flush(Renderer *r);
 static void get_uniform_location(GLuint program, GLint locations[UNIFORM_COUNT]);
 
-void renderer_init(Renderer *r, const char *vertex_path, const char *color_path, const char *texture_path)
+void renderer_init(Renderer *r, const char *vertex_path, const char *color_path, const char *texture_path, const char *text_path)
 {
     // vertex attribute object
     glGenVertexArrays(1, &r->vao);
@@ -53,6 +57,9 @@ void renderer_init(Renderer *r, const char *vertex_path, const char *color_path,
 
     // texture shader compilation
     shader_new(&r->program[SHADER_TEXTURE], vertex_path, texture_path, NULL);
+
+    // text shader compilation
+    shader_new(&r->program[SHADER_TEXT], vertex_path, text_path, NULL);
 }
 
 void renderer_vertex(Renderer *r, Vec2f pos, Vec4f col, Vec2f uv)
@@ -78,14 +85,14 @@ void renderer_solid_rect(Renderer *r, float x, float y, float w, float h, Vec4f 
     renderer_triangle(r, vec2f(x, y + h), vec2f(x + w, y + h), vec2f(x + w, y), col, col, col, vec2fs(0), vec2fs(0), vec2fs(0));
 }
 
-void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, float uv_x, float uv_y, float uv_w, float uv_h)
+void renderer_texture_rect(Renderer *r, float x, float y, float w, float h, float uv_x, float uv_y, float uv_w, float uv_h, Vec4f c)
 {
     renderer_triangle(r, vec2f(x, y),       vec2f(x, y + h),          vec2f(x + w, y), 
-                         vec4fs(0),         vec4fs(0),                vec4fs(0), 
+                         c,                 c,                        c, 
                          vec2f(uv_x, uv_y), vec2f(uv_x, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y));
 
     renderer_triangle(r, vec2f(x, y + h),          vec2f(x + w, y + h),             vec2f(x + w, y),
-                         vec4fs(0),                vec4fs(0),                       vec4fs(0),
+                         c,                 c,                        c, 
                          vec2f(uv_x, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y + uv_h), vec2f(uv_x + uv_w, uv_y));
 }
 
@@ -137,6 +144,7 @@ void renderer_set_shader(Renderer *r, enum Shader shader)
     glUseProgram(r->program[shader]);
     get_uniform_location(r->program[shader], r->uniforms);
     glUniform1f(r->uniforms[UNIFORM_TIME], r->time);
+    glUniform2f(r->uniforms[UNIFORM_RESOLUTION], r->ww, r->wh);
 }
 
 void renderer_flush(Renderer *r)
@@ -155,8 +163,8 @@ void texture_new(const char *texture_image_path)
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

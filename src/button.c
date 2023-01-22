@@ -27,5 +27,5 @@ void button_update(Button *btn, float mouse_x, float mouse_y, int mouse_btn)
 void button_render(Button *btn, Renderer *r)
 {
     renderer_texture_rect(r, btn->base.x, btn->base.y,    btn->w,    btn->h,
-                          btn->uv_base.x, btn->uv_base.y, btn->uv_w, btn->uv_h);
+                          btn->uv_base.x, btn->uv_base.y, btn->uv_w, btn->uv_h, vec4fs(1.f));
 }

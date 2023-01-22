@@ -3,17 +3,20 @@
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "ft2build.h"
+#include FT_FREETYPE_H
 
 #include "util.h"
 #include "lineal.h"
 #include "renderer.h"
 #include "button.h"
+#include "glyphs.h"
 
 GLFWwindow *window;
 int ww, wh;
 
 Renderer r = {0};
-    
+Glyph_Atlas atlas = {0}; 
 Button btn;
 
 void cleanup(void);
@@ -33,11 +36,15 @@ int main()
     load_opengl_functions();
 
     glClearColor(0.7f, 0.9f, 0.1f, 1.0f);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 
-    renderer_init(&r, "shaders/cterm.vert", "shaders/color.frag", "shaders/texture.frag");
+    renderer_init(&r, "shaders/cterm.vert", "shaders/color.frag", "shaders/texture.frag", "shaders/text.frag");
     texture_new("resources/red_button.jpg");
 
-    button(&btn, -.08, -.08, .2, .2, 0.f, 0.f, 1.f, 1.f, btn0_on_click);
+    FT_Library ft_library = {0};
+    freetype_init(&ft_library);
+    glyphs_atlas_init(&atlas, ft_library, "resources/VictorMono-Regular.ttf");
 
     // main loop
     while (glfwWindowShouldClose(window) == GLFW_FALSE) {
@@ -45,10 +52,13 @@ int main()
         glfw_process_keyboard_input(window);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        renderer_set_shader(&r, SHADER_TEXTURE);
-        button_render(&btn, &r);
+        Vec2f pos = vec2f(-200.0f, 0.0f);
+        renderer_set_shader(&r, SHADER_TEXT);
+        glyphs_render_text(&atlas, &r, "Hello OpenGL!", &pos, vec4f(0.f, 1.f, 0.f, 1.f));
 
         r.time = glfwGetTime();
+        r.ww = ww;
+        r.wh = wh;
         glfwSwapBuffers(window);
     }
 
