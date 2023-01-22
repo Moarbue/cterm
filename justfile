@@ -35,4 +35,4 @@ run:
     ./{{bin}}
 
 clean:
-    rm -rf {{bin}} {{bin_dir}}/{{shader_dir}}/
+    rm -rf {{bin}} {{bin_dir}}/{{shader_dir}}/ {{bin_dir}}/{{resources_dir}}
